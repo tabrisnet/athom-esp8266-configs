@@ -33,6 +33,9 @@ substitutions:
   # Enable or disable the use of IPv6 networking on the device
   ipv6_enable: "false"
 
+packages:
+  wifi_sensors: !include common/wifi_sensors.yaml
+
 esphome:
   name: "${name}"
   friendly_name: "${friendly_name}"
@@ -91,21 +94,6 @@ sensor:
     entity_category: diagnostic
     internal: true
 
-  - platform: wifi_signal
-    name: "WiFi Signal dB"
-    id: wifi_signal_db
-    update_interval: 60s
-    entity_category: "diagnostic"
-
-  - platform: copy
-    source_id: wifi_signal_db
-    name: "WiFi Signal Percent"
-    filters:
-      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
-    unit_of_measurement: "Signal %"
-    entity_category: "diagnostic"
-    device_class: ""
-
 button:
   - platform: restart
     name: "Restart"
@@ -155,17 +143,6 @@ light:
       number: GPIO5
 
 text_sensor:
-  - platform: wifi_info
-    ip_address:
-      name: "IP Address"
-      entity_category: diagnostic
-    ssid:
-      name: "Connected SSID"
-      entity_category: diagnostic
-    mac_address:
-      name: "Mac Address"
-      entity_category: diagnostic
-
   #  Creates a sensor showing when the device was last restarted
   - platform: template
     name: 'Last Restart'

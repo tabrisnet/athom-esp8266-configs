@@ -8,6 +8,9 @@ substitutions:
   led_rgb_order: GRB
   led_chipset: WS2811
 
+packages:
+  wifi_sensors: !include common/wifi_sensors.yaml
+
 esphome:
   name: "${device_name}"
   friendly_name: ""
@@ -74,10 +77,6 @@ sensor:
   - platform: uptime
     name: "Uptime Sensor"
 
-  - platform: wifi_signal
-    name: "WiFi Signal"
-    update_interval: 60s
-
 button:
   - platform: factory_reset
     name: "Reset"
@@ -100,15 +99,6 @@ light:
       - addressable_rainbow:
       - addressable_scan:
 
-text_sensor:
-  - platform: wifi_info
-    ip_address:
-      name: "IP Address"
-    ssid:
-      name: "Connected SSID"
-    mac_address:
-      name: "Mac Address"
-     
 time:
   - platform: sntp
     id: sntp_time

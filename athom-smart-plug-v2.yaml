@@ -31,6 +31,9 @@ substitutions:
   # Specifies whether pins should be initialised as early as possible to known values. Recommended value is false where switches are involved, as these will toggle when updating the firmware or when restarting the device. Defaults to true.
   early_pin_init: "true"
 
+packages:
+  wifi_sensors: !include common/wifi_sensors.yaml
+
 esphome:
   name: "${name}"
   friendly_name: "${friendly_name}"
@@ -168,23 +171,6 @@ sensor:
     id: uptime_sensor
     entity_category: diagnostic
     internal: true
-
-  # Reports the WiFi signal strength/RSSI in dB
-  - platform: wifi_signal
-    name: "WiFi Signal dB"
-    id: wifi_signal_db
-    update_interval: 60s
-    entity_category: diagnostic
-
-  # Reports the WiFi signal strength in %
-  - platform: copy
-    source_id: wifi_signal_db
-    name: "WiFi Signal Percent"
-    filters:
-      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
-    unit_of_measurement: "%"
-    entity_category: diagnostic
-    device_class: ""
 
   - platform: cse7766
     current:
@@ -324,17 +310,6 @@ light:
       number: GPIO13
 
 text_sensor:
-  - platform: wifi_info
-    ip_address:
-      name: "IP Address"
-      entity_category: diagnostic
-    ssid:
-      name: "Connected SSID"
-      entity_category: diagnostic
-    mac_address:
-      name: "Mac Address"
-      entity_category: diagnostic
-
   #  Creates a sensor showing when the device was last restarted
   - platform: template
     name: 'Last Restart'
